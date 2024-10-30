@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <TodoTitle />
-    <TodoAddTask @add-task="pushTask"/>
+    <TodoAddTask @add-task="addTask"/>
     <TodoList
-    :task-list="taskList"
-    @delete="todoDelete"
+      :task-list="taskList"
+      @delete="todoDelete"
     />
   </div>
 </template>
@@ -28,11 +28,11 @@ export default {
   },
 
   methods: {
-    pushTask(task_description, priority_status) {
+    addTask(task_description, priority_status) {
       const newTask = {
         id: Date.now(),
-        task_description: task_description,
-        priority_status: priority_status
+        task_description,
+        priority_status
       };
       this.taskList.push(newTask);
     },
