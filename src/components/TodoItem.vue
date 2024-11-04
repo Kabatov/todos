@@ -1,8 +1,24 @@
 <template>
     <li class="todo-item">
-        <input class="todo-input-task" type="text" name="Пердеть" :value=task_description>
+        <input
+            class="todo-input-task"
+            type="text"
+            name="Пердеть"
+            :value=task_description
+        >
         <!-- <p class="todo-input-task">{{ task_description }}</p> -->
-        <button @click="todoDeleteItem" class="todo-delete-button">Сделано</button>
+        <button
+            @click="todoDeleteItem"
+            :style="uncompletedTaskButtonStyle"
+        >
+            Выполненно
+        </button>
+        <button
+            @click="todoDeleteItemComplete"
+            :style="completedTaskButtonStyle"
+        >
+            Не выполненно
+        </button>
         <div>
             <span>Приоритет:</span>
             <p class="todo-priority-status">{{ priority_status }}</p>
@@ -12,6 +28,28 @@
 
 <script>
 export default {
+    data() {
+        return {
+            uncompletedTaskButtonStyle: {
+                border: '1px solid black',
+                borderRadius: '10px',
+                backgroundColor: 'cornflowerblue',
+                width: '100px',
+                height: '50px',
+                fontSize: '14px'
+            },
+
+            completedTaskButtonStyle: {
+                border: '1px solid black',
+                borderRadius: '10px',
+                backgroundColor: 'red',
+                width: '100px',
+                height: '50px',
+                fontSize: '14px'
+            },
+        }
+    },
+
     props: {
         id: {
             type: Number,
@@ -30,6 +68,10 @@ export default {
     methods: {
         todoDeleteItem() {
             this.$emit('delete', this.id);
+        },
+
+        todoDeleteItemComplete() {
+            this.$emit('delete-complete', this.id);
         }
     }
 
@@ -49,14 +91,5 @@ export default {
     display: flex;
     justify-content: space-around;
     padding-bottom: 15px;
-}
-
-.todo-delete-button {
-    border: 1px solid black;
-    border-radius: 10px;
-    background-color: cornflowerblue;
-    width: 80px;
-    height: 50px;
-    font-size: 14px;
 }
 </style>

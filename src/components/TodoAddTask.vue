@@ -1,20 +1,44 @@
 <template>
     <div class="todo-add-task">
-      <input class="todo-add-input" type="text" placeholder="Напиши то, что тебе нужно сделать" v-model="addTaskInput">
+      <input
+        class="todo-add-input"
+        type="text"
+        placeholder="Напиши то, что тебе нужно сделать"
+        v-model="addTaskInput"
+        >
       <div class="todo-task-priority">
         <legend>Приоритет задачи:</legend>
         <div class="todo-priority-container">
-          <input type="radio" v-model="priority" value="Low" name="priority-button" checked />
+          <input
+            type="radio"
+            v-model="priority"
+            value="Low"
+            name="priority-button" checked
+          />
           <label for="low">Низкий</label>
 
-          <input type="radio" v-model="priority" value="Medium" name="priority-button" />
+          <input
+            type="radio"
+            v-model="priority"
+            value="Medium"
+            name="priority-button"
+            />
           <label for="medium">Средний</label>
 
-          <input type="radio" v-model="priority" value="High" name="priority-button" />
+          <input
+            type="radio"
+            v-model="priority"
+            value="High"
+            name="priority-button" />
           <label for="high">Высокий</label>
         </div>
       </div>
-      <button @click="addTask" class="todo-add-button">Добавить</button>
+      <button
+        class="todo-add-button"
+        @click="addTask"
+      >
+        Добавить
+      </button>
     </div>
 </template>
 
