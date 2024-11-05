@@ -35,11 +35,15 @@ export default {
   },
 
   watch: {
-    taskList() {
-      const priorityOrder = { high: 1, medium: 2, low: 3 }
+    taskList: {
+      handler() {
+        const priorityOrder = { High: 1, Medium: 2, Low: 3 }
 
-      this.taskList.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
-  }
+        this.taskList.sort((a, b) => priorityOrder[a.priority_status] - priorityOrder[b.priority_status]);
+      },
+      deep: true
+    }
+
   },
 
   methods: {

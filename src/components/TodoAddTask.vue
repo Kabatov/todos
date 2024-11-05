@@ -13,7 +13,7 @@
             type="radio"
             v-model="priority"
             value="Low"
-            name="priority-button" checked
+            name="priority-button"
           />
           <label for="low">Низкий</label>
 
@@ -36,6 +36,7 @@
       <button
         class="todo-add-button"
         @click="addTask"
+        :disabled="addTaskInput.length === 0 || priority === null"
       >
         Добавить
       </button>
