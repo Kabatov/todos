@@ -1,30 +1,60 @@
 <template>
     <li class="todo-item">
-        <input class="todo-input-task" type="text" name="Пердеть" :value=task_description>
-        <!-- <p class="todo-input-task">{{ task_description }}</p> -->
-        <button @click="todoDeleteItem" class="todo-delete-button">Сделано</button>
+        <input
+            class="todo-item__input-task"
+            name="Глядеть"
+            v-model="description"
+        >
+        <button
+            class="todo-item__add-button"
+            @click="todoDeleteItem"
+        >
+            Выполненно
+        </button>
+        <button
+            class="todo-item__delete-button"
+            @click="todoDeleteItem"
+        >
+            Не выполненно
+        </button>
         <div>
             <span>Приоритет:</span>
-            <p class="todo-priority-status">{{ priority_status }}</p>
+            <p class="todo-item__priority-status">{{ priorityStatus }}</p>
         </div>
     </li>
 </template>
 
 <script>
 export default {
+
     props: {
         id: {
             type: Number,
             required: true
         },
-        task_description: {
+        taskDescription: {
             type: String,
             required: true
         },
-        priority_status: {
+        priorityStatus: {
             type: String,
             required: true
         },
+    },
+
+    data() {
+        return {
+            description: this.taskDescription,
+        }
+    },
+
+    watch: {
+        description(newDes) {
+            this.$emit('update-task', {
+                description: newDes,
+                id: this.id
+            })
+        }
     },
 
     methods: {
@@ -37,7 +67,13 @@ export default {
 </script>
 
 <style>
-.todo-input-task {
+.todo-item {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 15px;
+}
+
+.todo-item__input-task {
   outline: none;
   border: none;
   border: solid 0 #f2f2f2;
@@ -45,17 +81,20 @@ export default {
   font-size: 16px;
 }
 
-.todo-item {
-    display: flex;
-    justify-content: space-around;
-    padding-bottom: 15px;
-}
-
-.todo-delete-button {
+.todo-item__add-button {
     border: 1px solid black;
     border-radius: 10px;
     background-color: cornflowerblue;
-    width: 80px;
+    width: 100px;
+    height: 50px;
+    font-size: 14px;
+}
+
+.todo-item__delete-button {
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: red;
+    width: 100px;
     height: 50px;
     font-size: 14px;
 }

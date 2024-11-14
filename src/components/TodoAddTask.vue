@@ -1,20 +1,49 @@
 <template>
     <div class="todo-add-task">
-      <input class="todo-add-input" type="text" placeholder="Напиши то, что тебе нужно сделать" v-model="addTaskInput">
-      <div class="todo-task-priority">
-        <legend>Приоритет задачи:</legend>
-        <div class="todo-priority-container">
-          <input type="radio" v-model="priority" value="Low" name="priority-button" checked />
-          <label for="low">Низкий</label>
-
-          <input type="radio" v-model="priority" value="Medium" name="priority-button" />
-          <label for="medium">Средний</label>
-
-          <input type="radio" v-model="priority" value="High" name="priority-button" />
-          <label for="high">Высокий</label>
+      <input
+        class="todo-add-task__input"
+        placeholder="Напиши то, что тебе нужно сделать"
+        v-model="inputTask"
+        >
+      <form class="todo-add-task__form">
+        <h2>Приоритет задачи:</h2>
+        <div class="todo-add-task__priority">
+          <label>
+            <input
+              class="todo-add-task__input-priority"
+              type="radio"
+              v-model="priority"
+              value="Low"
+            />
+            Низкий
+          </label>
+          <label>
+            <input
+              class="todo-add-task__input-priority"
+              type="radio"
+              v-model="priority"
+              value="Medium"
+            />
+            Средний
+          </label>
+          <label>
+            <input
+              class="todo-add-task__input-priority"
+              type="radio"
+              v-model="priority"
+              value="High"
+            />
+            Высокий
+          </label>
         </div>
-      </div>
-      <button @click="addTask" class="todo-add-button">Добавить</button>
+      </form>
+      <button
+        class="todo-add-task__button"
+        @click="addTask"
+        :disabled="!inputTask.length || !priority"
+      >
+        Добавить
+      </button>
     </div>
 </template>
 
@@ -24,15 +53,18 @@ export default {
 
     data() {
         return {
-            addTaskInput: '',
-            priority: null
+          inputTask: '',
+          priority: null
         }
     },
 
     methods: {
-        addTask() {
-            this.$emit('add-task', this.addTaskInput, this.priority);
-            this.addTaskInput = '';
+      addTask() {
+            this.$emit('add-task', {
+              taskDescription: this.inputTask,
+              priorityStatus: this.priority
+            });
+            this.inputTask = '';
             this.priority = null;
         }
     }
@@ -40,7 +72,8 @@ export default {
 </script>
 
 <style>
-.todo-add-input {
+
+.todo-add-task__input {
     width: 290px;
     height: 20px;
     border: 1px solid black;
@@ -48,7 +81,7 @@ export default {
     padding: 10px;
 }
 
-.todo-add-button {
+.todo-add-task__button {
     padding: 10px;
     border: 1px solid black;
     border-radius: 10px;
@@ -56,24 +89,16 @@ export default {
     font-size: 15px;
 }
 
-.todo-task-priority {
+.todo-add-task__form {
   margin-top: 10px;
   padding-bottom: 10px;
 }
 
-p, label {
-  font: 14px;
-}
-
-input {
+.todo-add-task__input-priority {
   margin: 0.4rem;
 }
 
-legend {
-  font-size: 20px;
-}
-
-.todo-priority-container {
+.todo-add-task__priority {
   width: 300px;
   text-align: center;
   margin-top: 10px;
