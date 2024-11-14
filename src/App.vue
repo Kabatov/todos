@@ -1,14 +1,17 @@
 <template>
-  <div class="container">
+  <div class="todo-app">
     <TodoTitle />
     <TodoAddTask @add-task="addTask"/>
     <TodoList
       :task-list="taskList"
-      @delete="todoDelete"
+      @delete-todo="(id) => deleteTodo(id, 'taskList', 'taskListCompleted')"
+      :title="'Список Задач'"
+      @update-task="updateTask"
     />
-    <TodoListCompleted
-      :task-list-completed="taskListCompleted"
-      @delete-complete="todoCompletedButton"
+    <TodoList
+      :task-list="taskListCompleted"
+      @delete-todo="(id) => deleteTodo(id, 'taskListCompleted', 'taskList')"
+      :title="'Выполненные Задачи'"
     />
   </div>
 </template>
@@ -16,15 +19,13 @@
 <script>
 import TodoAddTask from './components/TodoAddTask.vue';
 import TodoList from './components/TodoList.vue';
-import TodoListCompleted from './components/TodoListCompleted.vue';
 import TodoTitle from './components/TodoTitle.vue';
 
 export default {
   components: {
     TodoTitle,
     TodoList,
-    TodoAddTask,
-    TodoListCompleted
+    TodoAddTask
   },
 
   data() {
@@ -39,7 +40,7 @@ export default {
       handler() {
         const priorityOrder = { High: 1, Medium: 2, Low: 3 }
 
-        this.taskList.sort((a, b) => priorityOrder[a.priority_status] - priorityOrder[b.priority_status]);
+        this.taskList.sort((a, b) => priorityOrder[a.priorityStatus] - priorityOrder[b.priorityStatus]);
       },
       deep: true
     }
@@ -47,33 +48,32 @@ export default {
   },
 
   methods: {
-    addTask(task_description, priority_status) {
+    addTask({taskDescription, priorityStatus}) {
       const newTask = {
         id: Date.now(),
-        task_description,
-        priority_status
+        taskDescription,
+        priorityStatus
       };
       this.taskList.push(newTask);
     },
 
-    todoDelete(id) {
-      const itemIndex = this.taskList.findIndex(item => item.id === id)
+    deleteTodo(id, mainArr, secondArr) {
+      const itemIndex = this[mainArr].findIndex(item => item.id === id)
 
       if (itemIndex !== -1) {
-        this.taskListCompleted.push(this.taskList[itemIndex])
+        this[secondArr].push(this[mainArr][itemIndex])
       }
 
-      this.taskList = this.taskList.filter((task) => id !== task.id);
+      this[mainArr] = this[mainArr].filter((task) => id !== task.id);
     },
 
-    todoCompletedButton(id) {
-      const itemIndex = this.taskListCompleted.findIndex(item => item.id === id)
-
-      if (itemIndex !== -1) {
-        this.taskList.push(this.taskListCompleted[itemIndex])
-      }
-
-      this.taskListCompleted = this.taskListCompleted.filter((task) => id !== task.id);
+    updateTask({description, id}) {
+      this.taskList = this.taskList.map((task) => {
+        if(task.id === id) {
+          task.taskDescription = description
+        }
+        return task
+      });
     }
   }
 }
@@ -81,7 +81,7 @@ export default {
 </script>
 
 <style>
-.container {
+.todo-app {
   text-align: center;
   margin: 0 auto;
 }
