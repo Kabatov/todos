@@ -50,43 +50,42 @@
 <script>
 
 export default {
+  data() {
+    return {
+      inputTask: '',
+      priority: null
+      }
+  },
 
-    data() {
-        return {
-          inputTask: '',
-          priority: null
-        }
-    },
-
-    methods: {
-      addTask() {
-            this.$emit('add-task', {
-              taskDescription: this.inputTask,
-              priorityStatus: this.priority
-            });
-            this.inputTask = '';
-            this.priority = null;
-        }
+  methods: {
+    addTask() {
+      this.$emit('add-task', {
+        taskDescription: this.inputTask,
+        priorityStatus: this.priority
+      });
+        this.inputTask = '';
+        this.priority = null;
     }
+  }
 }
 </script>
 
 <style>
 
 .todo-add-task__input {
-    width: 290px;
-    height: 20px;
-    border: 1px solid black;
-    border-radius: 10px;
-    padding: 10px;
+  width: 290px;
+  height: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 .todo-add-task__button {
-    padding: 10px;
-    border: 1px solid black;
-    border-radius: 10px;
-    background-color: cornflowerblue;
-    font-size: 15px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: cornflowerblue;
+  font-size: 15px;
 }
 
 .todo-add-task__form {

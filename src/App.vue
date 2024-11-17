@@ -2,17 +2,24 @@
   <div class="todo-app">
     <TodoTitle />
     <TodoAddTask @add-task="addTask"/>
-    <TodoList
-      :task-list="taskList"
-      @delete-todo="(id) => deleteTodo(id, 'taskList', 'taskListCompleted')"
-      :title="'Список Задач'"
-      @update-task="updateTask"
-    />
-    <TodoList
-      :task-list="taskListCompleted"
-      @delete-todo="(id) => deleteTodo(id, 'taskListCompleted', 'taskList')"
-      :title="'Выполненные Задачи'"
-    />
+    <TaskListSwitching @set-selected-task-list="setSelectTaskList"/>
+    <keep-alive>
+      <TodoList
+        v-if="activeTaskList === 'task-list'"
+        :task-list="taskList"
+        @delete-todo="(id) => deleteTodo(id, 'taskList', 'taskListCompleted')"
+        :title="'Невыполненные Задачи'"
+        @update-task="updateTask"
+      />
+    </keep-alive>
+    <keep-alive>
+      <TodoList
+        v-if="activeTaskList === 'task-list-completed'"
+        :task-list="taskListCompleted"
+        @delete-todo="(id) => deleteTodo(id, 'taskListCompleted', 'taskList')"
+        :title="'Выполненные Задачи'"
+      />
+    </keep-alive>
   </div>
 </template>
 
@@ -20,18 +27,21 @@
 import TodoAddTask from './components/TodoAddTask.vue';
 import TodoList from './components/TodoList.vue';
 import TodoTitle from './components/TodoTitle.vue';
+import TaskListSwitching from './components/TaskListSwitching.vue';
 
 export default {
   components: {
     TodoTitle,
     TodoList,
-    TodoAddTask
+    TodoAddTask,
+    TaskListSwitching
   },
 
   data() {
     return {
       taskList: [],
-      taskListCompleted: []
+      taskListCompleted: [],
+      activeTaskList: 'task-list'
     }
   },
 
@@ -44,7 +54,6 @@ export default {
       },
       deep: true
     }
-
   },
 
   methods: {
@@ -74,6 +83,10 @@ export default {
         }
         return task
       });
+    },
+
+    setSelectTaskList(arr) {
+      this.activeTaskList = arr;
     }
   }
 }
