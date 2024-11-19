@@ -2,23 +2,23 @@
   <div class="todo-app">
     <TodoTitle />
     <TodoAddTask @add-task="addTask"/>
-    <TaskListSwitching @set-selected-task-list="setSelectTaskList"/>
+    <ListSwitcher @set-selected-task-list="setSelectTaskList"/>
     <keep-alive>
-      <TodoList
-        v-if="activeTaskList === 'task-list'"
-        :task-list="taskList"
-        @delete-todo="(id) => deleteTodo(id, 'taskList', 'taskListCompleted')"
-        :title="'Невыполненные Задачи'"
-        @update-task="updateTask"
-      />
-    </keep-alive>
-    <keep-alive>
-      <TodoList
-        v-if="activeTaskList === 'task-list-completed'"
-        :task-list="taskListCompleted"
-        @delete-todo="(id) => deleteTodo(id, 'taskListCompleted', 'taskList')"
-        :title="'Выполненные Задачи'"
-      />
+      <div>
+        <TodoList
+          v-if="activeTab === 'task-list'"
+          :task-list="taskList"
+          @delete-todo="(id) => deleteTodo(id, 'taskList', 'taskListCompleted')"
+          :title="'Невыполненные Задачи'"
+          @update-task="updateTask"
+        />
+        <TodoList
+          v-if="activeTab === 'task-list-completed'"
+          :task-list="taskListCompleted"
+          @delete-todo="(id) => deleteTodo(id, 'taskListCompleted', 'taskList')"
+          :title="'Выполненные Задачи'"
+        />
+      </div>
     </keep-alive>
   </div>
 </template>
@@ -27,21 +27,21 @@
 import TodoAddTask from './components/TodoAddTask.vue';
 import TodoList from './components/TodoList.vue';
 import TodoTitle from './components/TodoTitle.vue';
-import TaskListSwitching from './components/TaskListSwitching.vue';
+import ListSwitcher from './components/ListSwitcher.vue';
 
 export default {
   components: {
     TodoTitle,
     TodoList,
     TodoAddTask,
-    TaskListSwitching
+    ListSwitcher
   },
 
   data() {
     return {
       taskList: [],
       taskListCompleted: [],
-      activeTaskList: 'task-list'
+      activeTab: 'task-list'
     }
   },
 
@@ -85,8 +85,8 @@ export default {
       });
     },
 
-    setSelectTaskList(arr) {
-      this.activeTaskList = arr;
+    setSelectTaskList(str) {
+      this.activeTab = str;
     }
   }
 }

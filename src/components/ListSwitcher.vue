@@ -17,11 +17,10 @@
 
 <script>
 export default {
-    props: ['task-list', 'task-list-completed'],
 
     methods: {
-        setSelectTask(arr) {
-            this.$emit('set-selected-task-list', arr)
+        setSelectTask(str) {
+            this.$emit('set-selected-task-list', str)
         }
     }
 }
