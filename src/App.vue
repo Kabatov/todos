@@ -2,18 +2,18 @@
   <div class="todo-app">
     <TodoTitle />
     <TodoAddTask @add-task="addTask"/>
-    <ListSwitcher @set-selected-task-list="setSelectTaskList"/>
+    <ListSwitcher @change-active-tab="changeActiveTab"/>
     <keep-alive>
       <div>
         <TodoList
-          v-if="activeTab === 'task-list'"
+          v-if="isActiveTaskList"
           :task-list="taskList"
           @delete-todo="(id) => deleteTodo(id, 'taskList', 'taskListCompleted')"
           :title="'Невыполненные Задачи'"
           @update-task="updateTask"
         />
         <TodoList
-          v-if="activeTab === 'task-list-completed'"
+          v-if="isActiveTaskListCompleted"
           :task-list="taskListCompleted"
           @delete-todo="(id) => deleteTodo(id, 'taskListCompleted', 'taskList')"
           :title="'Выполненные Задачи'"
@@ -41,7 +41,17 @@ export default {
     return {
       taskList: [],
       taskListCompleted: [],
-      activeTab: 'task-list'
+      isActiveTaskListTab: 'task-list'
+    }
+  },
+
+  computed: {
+    isActiveTaskList() {
+      return this.isActiveTaskListTab === 'task-list';
+    },
+
+    isActiveTaskListCompleted() {
+      return this.isActiveTaskListTab === 'task-list-completed';
     }
   },
 
@@ -85,8 +95,8 @@ export default {
       });
     },
 
-    setSelectTaskList(str) {
-      this.activeTab = str;
+    changeActiveTab(newTab) {
+      this.isActiveTaskListTab = newTab;
     }
   }
 }
