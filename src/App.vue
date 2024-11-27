@@ -2,17 +2,24 @@
   <div class="todo-app">
     <TodoTitle />
     <TodoAddTask @add-task="addTask"/>
-    <TodoList
-      :task-list="taskList"
-      @delete-todo="(id) => deleteTodo(id, 'taskList', 'taskListCompleted')"
-      :title="'Список Задач'"
-      @update-task="updateTask"
-    />
-    <TodoList
-      :task-list="taskListCompleted"
-      @delete-todo="(id) => deleteTodo(id, 'taskListCompleted', 'taskList')"
-      :title="'Выполненные Задачи'"
-    />
+    <ListSwitcher @change-active-tab="changeActiveTab"/>
+    <keep-alive>
+      <div>
+        <TodoList
+          v-if="isActiveTaskList"
+          :task-list="taskList"
+          @delete-todo="(id) => deleteTodo(id, 'taskList', 'taskListCompleted')"
+          :title="'Невыполненные Задачи'"
+          @update-task="updateTask"
+        />
+        <TodoList
+          v-if="isActiveTaskListCompleted"
+          :task-list="taskListCompleted"
+          @delete-todo="(id) => deleteTodo(id, 'taskListCompleted', 'taskList')"
+          :title="'Выполненные Задачи'"
+        />
+      </div>
+    </keep-alive>
   </div>
 </template>
 
@@ -20,18 +27,31 @@
 import TodoAddTask from './components/TodoAddTask.vue';
 import TodoList from './components/TodoList.vue';
 import TodoTitle from './components/TodoTitle.vue';
+import ListSwitcher from './components/ListSwitcher.vue';
 
 export default {
   components: {
     TodoTitle,
     TodoList,
-    TodoAddTask
+    TodoAddTask,
+    ListSwitcher
   },
 
   data() {
     return {
       taskList: [],
-      taskListCompleted: []
+      taskListCompleted: [],
+      isActiveTaskListTab: 'task-list'
+    }
+  },
+
+  computed: {
+    isActiveTaskList() {
+      return this.isActiveTaskListTab === 'task-list';
+    },
+
+    isActiveTaskListCompleted() {
+      return this.isActiveTaskListTab === 'task-list-completed';
     }
   },
 
@@ -44,7 +64,6 @@ export default {
       },
       deep: true
     }
-
   },
 
   methods: {
@@ -74,6 +93,10 @@ export default {
         }
         return task
       });
+    },
+
+    changeActiveTab(newTab) {
+      this.isActiveTaskListTab = newTab;
     }
   }
 }
