@@ -8,7 +8,7 @@
         <select
             class="todo-item__select"
             @change="selectedTaskList"
-            :value="isCompleted"
+            v-model="completed"
         >
             <option :value="false">Не выполненно</option>
             <option :value="true">Выполненно</option>
@@ -44,14 +44,14 @@ export default {
             required: true
         },
         isCompleted: {
-            type: Boolean,
-            required: false
+            type: Boolean
         }
     },
 
     data() {
         return {
-            description: this.taskDescription
+            description: this.taskDescription,
+            completed: this.isCompleted,
         }
     },
 
@@ -65,10 +65,8 @@ export default {
     },
 
     methods: {
-        selectedTaskList(event) {
-            this.$emit('change-selected-task-list', Boolean(event.target.value), this.id);
-            console.log(event.target.value);
-
+        selectedTaskList() {
+            this.$emit('change-selected-task-list', this.completed, this.id);
         }
     }
 

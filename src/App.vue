@@ -58,8 +58,6 @@ export default {
   watch: {
     taskList: {
       handler() {
-        // eslint-disable-next-line no-debugger
-        debugger
         const priorityOrder = { High: 1, Medium: 2, Low: 3 }
 
         this.taskList.sort((a, b) => priorityOrder[a.priorityStatus] - priorityOrder[b.priorityStatus]);
@@ -81,7 +79,6 @@ export default {
     },
 
     onChangeSelectTaskList(isCompleted, id, oldList, newList)  {
-      console.log(isCompleted, 'Новое состояние')
       let task = null;
 
       this[oldList] = this[oldList].map(item => {
@@ -91,7 +88,7 @@ export default {
         }
         return item;
       });
-      console.log(this[oldList]);
+
       this[oldList] = this[oldList].filter(item => item.id !== id);
       this[newList].push(task);
     },
