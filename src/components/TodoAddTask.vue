@@ -4,7 +4,7 @@
         class="todo-add-task__input"
         placeholder="Напиши то, что тебе нужно сделать"
         v-model="inputTask"
-        >
+      >
       <form class="todo-add-task__form">
         <h2>Приоритет задачи:</h2>
         <div class="todo-add-task__priority">
@@ -36,6 +36,45 @@
             Высокий
           </label>
         </div>
+        <h2>Добавить тег к задаче:</h2>
+        <div class="todo-add-task__tag">
+          <label>
+            <input
+              class="todo-add-task__input-tag"
+              type="radio"
+              v-model="tag"
+              value="Work"
+            />
+            #Работа
+          </label>
+          <label>
+            <input
+              class="todo-add-task__input-tag"
+              type="radio"
+              v-model="tag"
+              value="Family"
+            />
+            #Семья
+          </label>
+          <label>
+            <input
+              class="todo-add-task__input-tag"
+              type="radio"
+              v-model="tag"
+              value="Personal"
+            />
+            #Личное
+          </label>
+          <label>
+            <input
+              class="todo-add-task__input-tag"
+              type="radio"
+              v-model="tag"
+              value="Sport"
+            />
+            #Спорт
+          </label>
+        </div>
       </form>
       <button
         class="todo-add-task__button"
@@ -53,7 +92,8 @@ export default {
   data() {
     return {
       inputTask: '',
-      priority: null
+      priority: null,
+      tag: null
       }
   },
 
@@ -61,10 +101,12 @@ export default {
     addTask() {
       this.$emit('add-task', {
         taskDescription: this.inputTask,
-        priorityStatus: this.priority
+        priorityStatus: this.priority,
+        tagStatus: this.tag
       });
         this.inputTask = '';
         this.priority = null;
+        this.tag = null;
     }
   }
 }
@@ -106,6 +148,26 @@ export default {
   padding: 5px;
   border: 1px solid black;
   border-radius: 10px;
+}
+
+.todo-add-task__form-tag {
+  margin-top: 10px;
+  padding-bottom: 10px;
+}
+
+.todo-add-task__tag {
+  width: 350px;
+  text-align: center;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.todo-add-task__input-tag {
+  margin: 0.4rem;
 }
 
 </style>

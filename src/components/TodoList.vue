@@ -8,7 +8,9 @@
         :id="item.id"
         :taskDescription="item.taskDescription"
         :priorityStatus="item.priorityStatus"
-        @delete="todoDelete"
+        :isCompleted="item.isCompleted"
+        :tagStatus="item.tagStatus"
+        @change-selected-task-list="changeSelectedTaskList"
         @update-task="updateTask"
         />
     </ul>
@@ -27,8 +29,8 @@ export default {
     props: ['task-list', 'title'],
 
     methods: {
-      todoDelete(id) {
-        this.$emit('delete-todo', id)
+      changeSelectedTaskList(isCompleted, id) {
+        this.$emit('on-change-selected-task-list', isCompleted, id)
       },
 
       updateTask({description, id}) {

@@ -5,28 +5,27 @@
             name="Глядеть"
             v-model="description"
         >
-        <button
-            class="todo-item__add-button"
-            @click="todoDeleteItem"
+        <select
+            class="todo-item__select"
+            @change="selectedTaskList"
+            v-model="completed"
         >
-            Выполненно
-        </button>
-        <button
-            class="todo-item__delete-button"
-            @click="todoDeleteItem"
-        >
-            Не выполненно
-        </button>
+            <option :value="false">Не выполненно</option>
+            <option :value="true">Выполненно</option>
+        </select>
         <div>
             <span>Приоритет:</span>
             <p class="todo-item__priority-status">{{ priorityStatus }}</p>
+        </div>
+        <div v-show="this.tagStatus !== null">
+            <span>Тег:</span>
+            <p class="todo-item__tag-status">{{ tagStatus }}</p>
         </div>
     </li>
 </template>
 
 <script>
 export default {
-
     props: {
         id: {
             type: Number,
@@ -40,11 +39,19 @@ export default {
             type: String,
             required: true
         },
+        tagStatus: {
+            type: String,
+            required: true
+        },
+        isCompleted: {
+            type: Boolean
+        }
     },
 
     data() {
         return {
             description: this.taskDescription,
+            completed: this.isCompleted,
         }
     },
 
@@ -58,8 +65,8 @@ export default {
     },
 
     methods: {
-        todoDeleteItem() {
-            this.$emit('delete', this.id);
+        selectedTaskList() {
+            this.$emit('change-selected-task-list', this.completed, this.id);
         }
     }
 
@@ -81,20 +88,9 @@ export default {
   font-size: 16px;
 }
 
-.todo-item__add-button {
-    border: 1px solid black;
+.todo-item__select {
     border-radius: 10px;
     background-color: cornflowerblue;
-    width: 100px;
-    height: 50px;
-    font-size: 14px;
-}
-
-.todo-item__delete-button {
-    border: 1px solid black;
-    border-radius: 10px;
-    background-color: red;
-    width: 100px;
     height: 50px;
     font-size: 14px;
 }

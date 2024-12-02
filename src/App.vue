@@ -8,14 +8,14 @@
         <TodoList
           v-if="isActiveTaskList"
           :task-list="taskList"
-          @delete-todo="(id) => deleteTodo(id, 'taskList', 'taskListCompleted')"
+          @on-change-selected-task-list="(isCompleted, id) => onChangeSelectTaskList(isCompleted, id, 'taskList', 'taskListCompleted')"
           :title="'Невыполненные Задачи'"
           @update-task="updateTask"
         />
         <TodoList
           v-if="isActiveTaskListCompleted"
           :task-list="taskListCompleted"
-          @delete-todo="(id) => deleteTodo(id, 'taskListCompleted', 'taskList')"
+          @on-change-selected-task-list="(isCompleted, id) => onChangeSelectTaskList(isCompleted, id, 'taskListCompleted', 'taskList')"
           :title="'Выполненные Задачи'"
         />
       </div>
@@ -67,16 +67,33 @@ export default {
   },
 
   methods: {
-    addTask({taskDescription, priorityStatus}) {
+    addTask({taskDescription, priorityStatus, tagStatus}) {
       const newTask = {
         id: Date.now(),
         taskDescription,
-        priorityStatus
+        priorityStatus,
+        tagStatus,
+        isCompleted: false
       };
       this.taskList.push(newTask);
     },
 
-    deleteTodo(id, mainArr, secondArr) {
+    onChangeSelectTaskList(isCompleted, id, oldList, newList)  {
+      let task = null;
+
+      this[oldList] = this[oldList].map(item => {
+        if(item.id === id) {
+          item.isCompleted = isCompleted;
+          task = item;
+        }
+        return item;
+      });
+
+      this[oldList] = this[oldList].filter(item => item.id !== id);
+      this[newList].push(task);
+    },
+
+    /* deleteTodo(id, mainArr, secondArr) {
       const itemIndex = this[mainArr].findIndex(item => item.id === id)
 
       if (itemIndex !== -1) {
@@ -84,14 +101,14 @@ export default {
       }
 
       this[mainArr] = this[mainArr].filter((task) => id !== task.id);
-    },
+    }, */
 
     updateTask({description, id}) {
       this.taskList = this.taskList.map((task) => {
         if(task.id === id) {
           task.taskDescription = description
         }
-        return task
+        return task;
       });
     },
 
